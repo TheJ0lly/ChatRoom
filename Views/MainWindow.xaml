@@ -1,0 +1,38 @@
+﻿<Window x:Class="ChatRoom.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChatRoom"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Name="HostServerButton" Click="HostServerButton_Click" Header="Host">
+                <MenuItem HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="New" AllowDrop="False"/>
+                <MenuItem HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="Existing" AllowDrop="False"/>
+            </MenuItem>
+            <MenuItem Name="JoinServerButton" Click="JoinServerButton_Click" Header="Join"/>
+        </Menu>
+        <ScrollViewer Grid.Row="1">
+            <ListBox VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        </ScrollViewer>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="IP:" Grid.Column="0"/>
+            <Label Name="IpLabel" Content="None" Grid.Column="1"/>
+            <Label Content="Port:" Grid.Column="2"/>
+            <Label Name="PortLabel" Content="None" Grid.Column="3"/>
+        </Grid>
+    </Grid>
+</Window>
