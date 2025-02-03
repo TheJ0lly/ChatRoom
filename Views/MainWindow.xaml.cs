@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ChatRoom.Network;
 
 namespace ChatRoom
 {
@@ -7,6 +8,8 @@ namespace ChatRoom
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Server? _activeServer;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -14,6 +17,7 @@ namespace ChatRoom
 
         private void HostServerButton_Click(object sender, RoutedEventArgs e)
         {
+            
         }
 
         private void JoinServerButton_Click(object sender, RoutedEventArgs e)

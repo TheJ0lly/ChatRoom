@@ -25,7 +25,7 @@ namespace ChatRoom.Network
             return JsonSerializer.Serialize(message);
         }
 
-        public static Message? FromJson(string json)
+        public static Message FromJson(string json)
         {
             return JsonSerializer.Deserialize<Message>(json);
         }
