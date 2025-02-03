@@ -1,4 +1,5 @@
-﻿using System.Threading.Channels;
+﻿using System.Collections.Specialized;
+using System.Threading.Channels;
 using System.Windows;
 using System.Windows.Controls;
 using ChatRoom.Network;
@@ -17,6 +18,7 @@ namespace ChatRoom
         public MainWindow()
         {
             InitializeComponent();
+            ((INotifyCollectionChanged)ChatBox.Items).CollectionChanged += ChatBox_CollectionChanged;
         }
 
         private async void HostServerButton_Click(object sender, RoutedEventArgs e)
@@ -190,6 +192,12 @@ namespace ChatRoom
             _activeClient = null;
             _activeServer?.Stop();
             _activeServer = null;
+        }
+
+        private void ChatBox_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            ChatBox.Items.MoveCurrentToLast();
+            ChatBox.ScrollIntoView(ChatBox.Items.CurrentItem);
         }
     }
 }
