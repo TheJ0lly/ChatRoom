@@ -20,7 +20,7 @@
             <MenuItem Name="JoinServerButton" Click="JoinServerButton_Click" Header="Join"/>
         </Menu>
         <ScrollViewer Grid.Row="1">
-            <ListBox VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+            <ListBox Name="ChatBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
         </ScrollViewer>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
