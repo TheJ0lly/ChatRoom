@@ -82,15 +82,6 @@ namespace ChatRoom
                     return;
                 }
             }
-            else
-            {
-                var msgs = _activeServer.ReadChat();
-
-                foreach (var msg in msgs)
-                {
-                    ChatBox.Items.Add(msg);
-                }
-            }
 
 
             _activeServer.Start();

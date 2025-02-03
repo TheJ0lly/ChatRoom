@@ -53,11 +53,32 @@ namespace ChatRoom.Network
                         
                         var json = Encoding.UTF8.GetString(buff, 0, read);
 
-                        // We add the visual
-                        chatbox.Dispatcher.Invoke(() =>
+                        var jsonSplit = json.Split('\n');
+
+                        if (jsonSplit.Length > 1)
                         {
-                            chatbox.Items.Add(new MessageView(MessageManager.FromJson(json)));
-                        });
+                            foreach (var line in jsonSplit)
+                            {
+                                if (line == string.Empty)
+                                {
+                                    continue;
+                                }
+                                // We add the visual
+                                chatbox.Dispatcher.Invoke(() =>
+                                {
+                                    chatbox.Items.Add(new MessageView(MessageManager.FromJson(line)));
+                                });
+                            }
+                        }
+                        else
+                        {
+                            // We add the visual
+                            chatbox.Dispatcher.Invoke(() =>
+                            {
+                                chatbox.Items.Add(new MessageView(MessageManager.FromJson(json)));
+                            });
+                        }
+
                     }
                     catch
                     {

@@ -109,7 +109,20 @@ namespace ChatRoom.Network
                     Task.Factory.StartNew(() =>
                     {
                         var thisClient = client;
+
                         var buff = new byte[4096];
+
+                        // Give the history if any
+                        using (StreamReader sr = new StreamReader($"Servers\\{_name}\\chat.txt"))
+                        {
+                            while (sr.ReadLine() is string msg)
+                            {
+                                var jsonbytes = Encoding.UTF8.GetBytes(msg);
+                                thisClient.GetStream().Write(jsonbytes, 0, jsonbytes.Length);
+                                thisClient.GetStream().Write(new byte[1] { (byte)'\n' });
+                            }
+                        }
+
                         while (true)
                         {
                             if (Token.IsCancellationRequested)
@@ -132,10 +145,6 @@ namespace ChatRoom.Network
                                 lock (mutex)
                                 {
                                     WriteMessage(json);
-                                }
-
-                                lock (mutex)
-                                {
                                     foreach (var client in _clients)
                                     {
                                         client.GetStream().WriteAsync(buff[..read]);
@@ -169,19 +178,6 @@ namespace ChatRoom.Network
                 sw.WriteLine(message);
             }
             return true;
-        }
-
-        public List<MessageView> ReadChat()
-        {
-            var messages = new List<MessageView>();
-            using (StreamReader sr = new StreamReader($"Servers\\{_name}\\chat.txt"))
-            {
-                while (sr.ReadLine() is string msg)
-                {
-                    messages.Add(new MessageView(MessageManager.FromJson(msg)));
-                }
-                return messages;
-            }
         }
     }
 }
