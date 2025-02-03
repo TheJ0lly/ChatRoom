@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatRoom"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="ChatRoom" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
@@ -23,6 +24,14 @@
             <ListBox Name="ChatBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
         </ScrollViewer>
         <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Send:" VerticalAlignment="Center" Grid.Column="0"/>
+            <TextBox Text="" FontSize="16" VerticalAlignment="Center" Grid.Column="1" TextWrapping="WrapWithOverflow" KeyUp="ToSendBox_KeyUp"/>
+        </Grid>
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="25"/>
                 <ColumnDefinition Width="120"/>

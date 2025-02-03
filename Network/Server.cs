@@ -55,7 +55,7 @@ namespace ChatRoom.Network
             return _clients.Count;
         }
 
-        public void Start(ListBox chatbox)
+        public void Start()
         {
             _listener.Start();
 
@@ -102,12 +102,13 @@ namespace ChatRoom.Network
                     catch
                     {
                         // In case of any errors we simply break and let it crash
-                        break;
+                        return;
                     }
 
                     // We start a Task for each client to listen to incoming messages
                     Task.Factory.StartNew(() =>
                     {
+                        var thisClient = client;
                         var buff = new byte[4096];
                         while (true)
                         {
@@ -120,7 +121,7 @@ namespace ChatRoom.Network
                             {
                                 // In some cases the client may close the connection before reading EOF
                                 // thus it will throw an IOException, but we don't really care because it will simply crash the task
-                                var read = client.GetStream().Read(buff, 0, buff.Length);
+                                var read = thisClient.GetStream().Read(buff);
                                 // If we read 0, it means the connection closed.
                                 if (read == 0)
                                     break;
@@ -133,16 +134,26 @@ namespace ChatRoom.Network
                                     WriteMessage(json);
                                 }
 
-                                // We add the visual
-                                chatbox.Dispatcher.Invoke(() =>
+                                lock (mutex)
                                 {
-                                    chatbox.Items.Add(new MessageView(MessageManager.FromJson(json)));
-                                });
+                                    foreach (var client in _clients)
+                                    {
+                                        client.GetStream().WriteAsync(buff[..read]);
+                                    }
+                                }
+
+                                //// We add the visual
+                                //chatbox.Dispatcher.Invoke(() =>
+                                //{
+                                //    chatbox.Items.Add(new MessageView(MessageManager.FromJson(json)));
+                                //});
                             }
                             catch
-                            { 
+                            {
+                                thisClient.Close();
                                 // In case of any error, we simply let the task crash, and remove the client from the list.
-                                _clients.Remove(client);
+                                _clients.Remove(thisClient);
+                                return;
                             }
                         }
                     }, Token.Token);
@@ -154,6 +165,7 @@ namespace ChatRoom.Network
         {
             _listener.Stop();
             Token.Cancel();
+            _listener.Dispose();
         }
 
         private bool WriteMessage(string message)
