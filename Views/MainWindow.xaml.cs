@@ -125,7 +125,15 @@ namespace ChatRoom
             var port = await detChan.Reader.ReadAsync();
 
             _activeClient = new Client(username);
-            _activeClient.Connect(ip, int.Parse(port));
+            if (!_activeClient.Connect(ip, int.Parse(port)))
+            {
+                MessageBox.Show("Failed to join server!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            IpLabel.Content = ip;
+            PortLabel.Content = port;
+
             _activeClient.Run(ChatBox);
         }
 
@@ -149,7 +157,19 @@ namespace ChatRoom
             msg.User = _activeClient.User;
             msg.Time = DateTime.Now.ToString("g");
 
-            _activeClient.Send(msg);
+            try
+            {
+                _activeClient.Send(msg);
+            }
+            catch
+            {
+                MessageBox.Show($"Server cannot be reached", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ChatBox.Items.Clear();
+                _activeClient.Disconnect();
+                _activeClient = null;
+                IpLabel.Content = "None";
+                PortLabel.Content = "None";
+            }
 
             // After we send the message we clear the bar
             tb.Text = string.Empty;

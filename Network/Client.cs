@@ -24,9 +24,17 @@ namespace ChatRoom.Network
             this.User = User;
         }
 
-        public void Connect(string IpAddress, int port)
+        public bool Connect(string IpAddress, int port)
         {
-            _client.Connect(IpAddress, port);
+            try
+            {
+                _client.Connect(IpAddress, port);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void Run(ListBox chatbox)
