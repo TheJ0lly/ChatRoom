@@ -107,6 +107,7 @@ namespace ChatRoom.Network
 
         public void Disconnect()
         {
+            Token.Cancel();
             _client.Close();
             _client.Dispose();
         }

@@ -85,8 +85,7 @@ namespace ChatRoom
 
 
             _activeServer.Start();
-            IpLabel.Content = _activeServer.IP;
-            PortLabel.Content = _activeServer.Port;
+            
 
             // Add the join window here, to create a new user.
 
@@ -101,6 +100,10 @@ namespace ChatRoom
                 return;
             }
             var username = await detChan.Reader.ReadAsync();
+
+            IpLabel.Content = _activeServer.IP;
+            PortLabel.Content = _activeServer.Port;
+            UserLabel.Content = username;
 
             _activeClient = new Client(username);
             _activeClient.Connect(_activeServer.IP, int.Parse(_activeServer.Port));
@@ -133,6 +136,7 @@ namespace ChatRoom
 
             IpLabel.Content = ip;
             PortLabel.Content = port;
+            UserLabel.Content = username;
 
             _activeClient.Run(ChatBox);
         }
@@ -169,10 +173,23 @@ namespace ChatRoom
                 _activeClient = null;
                 IpLabel.Content = "None";
                 PortLabel.Content = "None";
+                UserLabel.Content = "None";
             }
 
             // After we send the message we clear the bar
             tb.Text = string.Empty;
+        }
+
+        private void CloseConnectionButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChatBox.Items.Clear();
+            IpLabel.Content = "None";
+            PortLabel.Content = "None";
+            UserLabel.Content = "None";
+            _activeClient?.Disconnect();
+            _activeClient = null;
+            _activeServer?.Stop();
+            _activeServer = null;
         }
     }
 }

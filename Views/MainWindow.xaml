@@ -19,6 +19,7 @@
                 <MenuItem HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="Existing" AllowDrop="False"/>
             </MenuItem>
             <MenuItem Name="JoinServerButton" Click="JoinServerButton_Click" Header="Join"/>
+            <MenuItem Name="CloseConnectionButton" Click="CloseConnectionButton_Click" Header="Close connection"/>
         </Menu>
         <ScrollViewer Grid.Row="1">
             <ListBox Name="ChatBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
@@ -37,11 +38,15 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="35"/>
                 <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="37"/>
+                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
             <Label Content="IP:" Grid.Column="0"/>
             <Label Name="IpLabel" Content="None" Grid.Column="1"/>
             <Label Content="Port:" Grid.Column="2"/>
             <Label Name="PortLabel" Content="None" Grid.Column="3"/>
+            <Label Content="User:" Grid.Column="4"/>
+            <Label Name="UserLabel" Content="None" Grid.Column="5"/>
         </Grid>
     </Grid>
 </Window>
