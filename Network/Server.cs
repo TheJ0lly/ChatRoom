@@ -141,12 +141,6 @@ namespace ChatRoom.Network
                                         client.GetStream().WriteAsync(buff[..read]);
                                     }
                                 }
-
-                                //// We add the visual
-                                //chatbox.Dispatcher.Invoke(() =>
-                                //{
-                                //    chatbox.Items.Add(new MessageView(MessageManager.FromJson(json)));
-                                //});
                             }
                             catch
                             {

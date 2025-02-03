@@ -99,17 +99,43 @@ namespace ChatRoom
 
             // Add the join window here, to create a new user.
 
-            _activeClient = new Client("admin");
+            var detChan = Channel.CreateBounded<string>(1);
+            var JSW = new JoinServerWindow(false);
+            JSW.ServerDetailsChan = detChan;
+
+            var joinSuccess = JSW.ShowDialog();
+
+            if (joinSuccess is null || !joinSuccess.Value)
+            {
+                return;
+            }
+            var username = await detChan.Reader.ReadAsync();
+
+            _activeClient = new Client(username);
             _activeClient.Connect(_activeServer.IP, int.Parse(_activeServer.Port));
             _activeClient.Run(ChatBox);
         }
 
-        private void JoinServerButton_Click(object sender, RoutedEventArgs e)
+        private async void JoinServerButton_Click(object sender, RoutedEventArgs e)
         {
-            _activeServer?.Stop();
-            ChatBox.Items.Clear();
-            IpLabel.Content = "None";
-            PortLabel.Content = "None";
+            var detChan = Channel.CreateBounded<string>(3);
+            var JSW = new JoinServerWindow(true);
+            JSW.ServerDetailsChan = detChan;
+
+            var joinSuccess = JSW.ShowDialog();
+
+            if (joinSuccess is null || !joinSuccess.Value)
+            {
+                return;
+            }
+
+            var username = await detChan.Reader.ReadAsync();
+            var ip = await detChan.Reader.ReadAsync();
+            var port = await detChan.Reader.ReadAsync();
+
+            _activeClient = new Client(username);
+            _activeClient.Connect(ip, int.Parse(port));
+            _activeClient.Run(ChatBox);
         }
 
         private void ToSendBox_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
